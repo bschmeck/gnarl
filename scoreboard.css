@@ -3,6 +3,33 @@ body {
     font-size: 16px;
     line-height: 18px;
 }
+.name {
+    font-size: 64px;
+}
+.total {
+    font-size: 42px;
+}
+table.score {
+    height: 100%;
+    width: 100%;
+}
+.team_name {
+    font-size: 42px;
+}
+.game_score {
+    font-size: 24px;
+}
+.good_guy_title {
+    font-size: 36px;
+}
+.bad_guy {
+    font-size: 18px;
+    color: gray;
+}
+.good_guy {
+    font-size: 36px;
+    color: black;
+}
 .games { margin-left: 20px }
 .box {
 	border-radius: 4px;
@@ -11,12 +38,19 @@ body {
 	padding: 8px 10px;
 }
 .scorebox {
-	height: 125px;
-	width: 254px;
+	height: 100px;
+	width: 200px;
+}
+.middle {
+    height: 400px;
+    width: 200px;
+    line-height: 1.5;
+    text-align: center;
 }
 .legend {
 	width: 106px;
 	text-align: center;
+    padding: 8px 3px;
 }
 .clear { clear: both; }
 .tied {

@@ -2,25 +2,39 @@
 	<title>Test Scoreboard</title>
 	<link rel="stylesheet" href="http://twitter.github.com/bootstrap/assets/css/bootstrap.css">
     <link rel="stylesheet" href="scoreboard.css">
+    <script src="jquery-1.8.0.min.js"></script>
+    <script src="grid.js"></script>
+  <script type="text/javascript">
+    $(document).ready(function() {
+    grid_init();
+    });
+  </script>
   </head>
   <body>
-	<div class="box legend loss4"><strong>-14 &gt; Diff</strong></div>
-	<div class="box legend loss3"><strong>-14 &lt;= Diff &lt; -7</strong></div>
-	<div class="box legend loss2"><strong>-7 &lt;= Diff &lt; -3</strong></div>
-	<div class="box legend loss1"><strong>-3 &lt;= Diff &lt; 0</strong></div>
+	<div class="box legend loss4"><strong>-14 &gt; &Delta; </strong></div>
+	<div class="box legend loss3"><strong>-14 &le; &Delta; &lt; -7</strong></div>
+	<div class="box legend loss2"><strong>-7 &le; &Delta; &lt; -3</strong></div>
+	<div class="box legend loss1"><strong>-3 &le; &Delta; &lt; 0</strong></div>
 	<div class="box legend tied"><strong>Tied</strong></div>
-	<div class="box legend win1"><strong>0 &lt; Diff &lt;= 3</strong></div>
-	<div class="box legend win2"><strong>3 &lt; Diff &lt;= 7</strong></div>
-	<div class="box legend win3"><strong>7 &lt; Diff &lt;= 14</strong></div>
-	<div class="box legend win4"><strong>Diff &gt; 14</strong></div>
+	<div class="box legend win1"><strong>0 &lt; &Delta; &le; 3</strong></div>
+	<div class="box legend win2"><strong>3 &lt; &Delta; &le; 7</strong></div>
+	<div class="box legend win3"><strong>7 &lt; &Delta; &le; 14</strong></div>
+	<div class="box legend win4"><strong>&Delta; &gt; 14</strong></div>
 	<div class="clear"></div>
 	<div class="games">
 	<div class="box scorebox tied">
-	  <div> <strong>FOOBAR</strong> Game One</div>
+      <table class="score">
+        <tr><td class="team_name">GB</td><td class="game_score">28</td></tr>
+        <tr><td class="team_name">CHI</td><td class="game_score">21</td></tr>
+      </table>
 	</div>
 	<div class="box scorebox tied">
 	  <div> <strong>FOOBAR</strong> Game One</div>
 	</div>
+    <div class="box scorebox tied">
+      <span class="name">Ben</span><br>
+      <span class="total">7</span><br>
+    </div>
 	<div class="box scorebox tied">
 	  <div> <strong>FOOBAR</strong> Game One</div>
 	</div>
@@ -34,6 +48,10 @@
 	<div class="box scorebox win1">
 	  <div> <strong>FOOBAR</strong> Game One</div>
 	</div>
+    <div class="box scorebox tied">
+      <span class="name">Brian</span><br>
+      <span class="total">4</span><br>
+    </div>
 	<div class="box scorebox loss1">
 	  <div> <strong>FOOBAR</strong> Game One</div>
 	</div>
@@ -47,6 +65,10 @@
 	<div class="box scorebox win2">
 	  <div> <strong>FOOBAR</strong> Game One</div>
 	</div>
+    <div class="box scorebox tied">
+      <span class="good_guy_title">Good Guy:</span><br>
+      <span class="good_guy_choice good_guy">Ben</span> <span class="good_guy_choice bad_guy">Brian</span><br>
+    </div>
 	<div class="box scorebox loss2">
 	  <div> <strong>FOOBAR</strong> Game One</div>
 	</div>
@@ -60,6 +82,9 @@
 	<div class="box scorebox win3">
 	  <div> <strong>FOOBAR</strong> Game One</div>
 	</div>
+    <div class="box scorebox tied">
+      G.R.I.D.
+    </div>
 	<div class="box scorebox loss3">
 	  <div> <strong>FOOBAR</strong> Game One</div>
 	</div>
