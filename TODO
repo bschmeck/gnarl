@@ -1,0 +1,8 @@
+[ ] SERVER - Scrape scoreboard for current scores.
+[ ] SERVER - Store current scores in the db.
+[ ] SERVER - Enter picks for the week into the db.
+[ ] SERVER - Weekly picks data model.
+[ ] CLIENT - Current scores JSON model.
+[ ] CLIENT - Poll for new scores.
+[ ] CLIENT - Display new scores.
+[ ] CLIENT - Display "win" totals.
