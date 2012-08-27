@@ -9,6 +9,9 @@ body {
 .total {
     font-size: 42px;
 }
+.wins {
+    font-size: 21px;
+}
 table.score {
     height: 100%;
     width: 100%;
@@ -30,7 +33,10 @@ table.score {
     font-size: 36px;
     color: black;
 }
-.games { margin-left: 20px }
+.games { 
+    # margin-left: 20px 
+    float: left;
+}
 .box {
 	border-radius: 4px;
 	float: left;
@@ -41,11 +47,11 @@ table.score {
 	height: 100px;
 	width: 200px;
 }
-.middle {
-    height: 400px;
+.sidebar {
     width: 200px;
     line-height: 1.5;
     text-align: center;
+	border: 3px solid #999999;
 }
 .legend {
 	width: 106px;
