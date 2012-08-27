@@ -33,8 +33,10 @@ table.score {
     font-size: 36px;
     color: black;
 }
+.good_guy_choice {
+    cursor: pointer;
+}
 .games { 
-    # margin-left: 20px 
     float: left;
 }
 .box {
