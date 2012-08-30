@@ -61,11 +61,29 @@ function build_table(game) {
         .append(home_row);
 }
 
-function grid_update(game) {
+function update_game(game) {
     var box = $('#' + game.id);
     
     box.innerHTML(build_table(game));
     ben_team = choose_team(game, ben.teams);
     brian_team = choose_team(game, brian.teams);
     box.attr('class', choose_delta_class(game));
+}
+
+function update_wins() {
+    $("#ben_wins > .total").text(ben.total_wins);
+    $("#ben_wins > .wins").text(ben.final_wins);
+    $("#brian_wins > .total").text(brian.total_wins);
+    $("#brian_wins > .wins").text(brian.final_wins);
+}
+
+function update_grid(games) {
+    ben.reset_wins();
+    brian.reset_wins();
+    for (var game in games) {
+        update_game(game);
+        ben.update(game);
+        brian.update(game);
+    }
+    update_win_totals();
 }
