@@ -6,6 +6,10 @@ function grid_init() {
         $('.scorebox.win4, .scorebox.loss4').toggleClass('win4 loss4');
         $('.good_guy_choice').toggleClass('good_guy bad_guy');
     });
+    /* Ben is the default good guy, unless told otherwise. */
+    if (location.hash == '#brian') {
+        $('.bad_guy').click();
+    }
 }
 
 function choose_delta_class(game) {
