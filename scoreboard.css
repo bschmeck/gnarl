@@ -9,7 +9,7 @@ body {
 .total {
     font-size: 42px;
 }
-.wins {
+#ben_wins, #brian_wins {
     font-size: 21px;
 }
 table.score {
