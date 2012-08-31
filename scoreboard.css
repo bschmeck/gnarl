@@ -6,7 +6,7 @@ body {
 .name {
     font-size: 64px;
 }
-.total {
+.current {
     font-size: 42px;
 }
 #ben_wins, #brian_wins {
