@@ -4,14 +4,13 @@ from django.conf.urls.defaults import patterns, include, url
 # from django.contrib import admin
 # admin.autodiscover()
 
+grid_patterns = patters('',
+    url(r'^$', 'grid.views.index'),
+    url(r'scores/$', 'grid.views.scores')
+)
+
 urlpatterns = patterns('',
-    # Examples:
-    # url(r'^$', 'gnarl.views.home', name='home'),
-    # url(r'^gnarl/', include('gnarl.foo.urls')),
-
-    # Uncomment the admin/doc line below to enable admin documentation:
-    # url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
-
-    # Uncomment the next line to enable the admin:
-    # url(r'^admin/', include(admin.site.urls)),
+    url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
+    url(r'^admin/', include(admin.site.urls)),
+    (r'^grid/', include(grid_patterns)),
 )
