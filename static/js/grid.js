@@ -42,21 +42,79 @@ var Grid = new Class;
 Grid.include({
     ben: "",
     brian: "",
-    init: function() {
+    interval: 0,
+    init: function(interval) {
         this.ben = new Player("Ben", true);
         this.brian = new Player("Brian", false);
+        this.interval = interval;
+    },
+    configAjax: function() {
+        $(document).ajaxSend(function(event, xhr, settings) {
+            function getCookie(name) {
+                var cookieValue = null;
+                if (document.cookie && document.cookie != '') {
+                    var cookies = document.cookie.split(';');
+                    for (var i = 0; i < cookies.length; i++) {
+                        var cookie = jQuery.trim(cookies[i]);
+                        // Does this cookie string begin with the name we want?
+                        if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                            break;
+                        }
+                    }
+                }
+                return cookieValue;
+            }
+            function sameOrigin(url) {
+                // url could be relative or scheme relative or absolute
+                var host = document.location.host; // host + port
+                var protocol = document.location.protocol;
+                var sr_origin = '//' + host;
+                var origin = protocol + sr_origin;
+                // Allow absolute or scheme relative URLs to same origin
+                return (url == origin || url.slice(0, origin.length + 1) == origin + '/') ||
+                    (url == sr_origin || url.slice(0, sr_origin.length + 1) == sr_origin + '/') ||
+                    // or any other URL that isn't scheme relative or absolute i.e relative.
+                    !(/^(\/\/|http:|https:).*/.test(url));
+            }
+            function safeMethod(method) {
+                return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+            }
+
+            if (!safeMethod(settings.type) && sameOrigin(settings.url)) {
+                xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+            }
+        });
+    },
+    start: function() {
+        this.configAjax();
+
+        /* Link up event handlers. */
         $('.good_guy_choice').click(function(e){
             $('.scorebox.win1, .scorebox.loss1').toggleClass('win1 loss1');
             $('.scorebox.win2, .scorebox.loss2').toggleClass('win2 loss2');
             $('.scorebox.win3, .scorebox.loss3').toggleClass('win3 loss3');
             $('.scorebox.win4, .scorebox.loss4').toggleClass('win4 loss4');
             $('.good_guy_choice').toggleClass('good_guy bad_guy');
-            ben.is_good_guy = !ben.is_good_guy;
-            brian.is_good_guy = !brian.is_good_guy;
+            this.ben.is_good_guy = !this.ben.is_good_guy;
+            this.brian.is_good_guy = !this.brian.is_good_guy;
         });
+
         /* Ben is the default good guy, unless told otherwise. */
         if (location.hash == '#brian') {
             $('.bad_guy').click();
+        }
+
+        /* Start checking for updated scores. */
+        if (this.interval > 0) {
+            setInterval(this.proxy(function() {
+                var scores_url = "scores/";
+                $.get(scores_url, this.proxy(function(data) {
+                    /* Turn JSON into an array of games. */
+                    var games = this.parse_scores(data);
+                    this.update_grid(games);
+                }), "json");
+            }), this.interval);
         }
     },
     choose_delta_class: function(game) {
