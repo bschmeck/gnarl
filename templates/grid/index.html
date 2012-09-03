@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+	<meta charset="utf-8">
+	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+	<title>GNARL G.R.I.D.</title>
+    <link rel="stylesheet" href="{{STATIC_URL}}css/scoreboard.css">
+    <script src="{{STATIC_URL}}js/jquery-1.8.0.min.js"></script>
+    <script src="{{STATIC_URL}}js/grid.js"></script>
+
+	<script type="text/javascript">
+      $(document).ready(function() {
+      grid_init();
+      });
+	</script>
+  </head>
+
+  <body>
+	<div class="box legend loss4"><strong>-14 &gt; &Delta; </strong></div>
+	<div class="box legend loss3"><strong>-14 &le; &Delta; &lt; -7</strong></div>
+	<div class="box legend loss2"><strong>-7 &le; &Delta; &lt; -3</strong></div>
+	<div class="box legend loss1"><strong>-3 &le; &Delta; &lt; 0</strong></div>
+	<div class="box legend tied"><strong>Tied</strong></div>
+	<div class="box legend win1"><strong>0 &lt; &Delta; &le; 3</strong></div>
+	<div class="box legend win2"><strong>3 &lt; &Delta; &le; 7</strong></div>
+	<div class="box legend win3"><strong>7 &lt; &Delta; &le; 14</strong></div>
+	<div class="box legend win4"><strong>&Delta; &gt; 14</strong></div>
+	<div class="clear"></div>
+
+    <div class="sidebar box">
+      <div id="ben_wins">
+        <span class="name">Ben</span><br>
+        <span class="current">0</span> / <span class="wins">0</span><br>
+      </div>
+      <span class="good_guy_title">Good Guy:</span><br>
+      <span class="good_guy_choice good_guy">Ben</span>
+	  <span class="good_guy_choice bad_guy">Brian</span><br>
+      <div id="brian_wins">
+        <span class="name">Brian</span><br>
+        <span class="current">0</span> / <span class="wins">0</span><br>
+      </div>
+    </div>
+
+	<div class="games">
+	</div>
+  </body>
+</html>
