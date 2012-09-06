@@ -5,3 +5,4 @@
 /.pub/publish.py
 /s_pub
 /localsettings.py
+*.pyc
