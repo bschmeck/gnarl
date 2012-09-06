@@ -203,11 +203,11 @@ Grid.include({
 // Player.init(name, is_good_guy);
 var Player = new Class;
 Player.include({
-    name = "",
-    is_good_guy = "",
-    current_wins = "",
-    final_wins = "",
-    teams = "",
+    name: "",
+    is_good_guy: "",
+    current_wins: "",
+    final_wins: "",
+    teams: "",
     init: function(name, is_good_guy, teams) {
         this.name = name;
         this.is_good_guy = is_good_guy;
