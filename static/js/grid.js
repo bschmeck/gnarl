@@ -121,7 +121,7 @@ Grid.include({
         game_data = $.parseJSON(data);
         games = [];
         for (game_hash in game_data) {
-            games.push(Game.init(game_hash["fields"]));
+            games.push(new Game(game_hash["fields"]));
         }
         return games;
     },
@@ -243,8 +243,8 @@ Game.include({
     away_team: "",
     time_left: "",
     init: function(data) {
-        this.home_team = Team.init(data['home_team'], data['home_score']);
-        this.away_team = Team.init(data['away_team'], data['away_score']);
+        this.home_team = new Team(data['home_team'], data['home_score']);
+        this.away_team = new Team(data['away_team'], data['away_score']);
         this.time_left = data['time_left'];
     },
     is_final: function() {
