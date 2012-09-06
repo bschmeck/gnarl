@@ -1,10 +1,10 @@
 from django.conf.urls.defaults import patterns, include, url
 
 # Uncomment the next two lines to enable the admin:
-# from django.contrib import admin
-# admin.autodiscover()
+from django.contrib import admin
+admin.autodiscover()
 
-grid_patterns = patters('',
+grid_patterns = patterns('',
     url(r'^$', 'grid.views.index'),
     url(r'scores/$', 'grid.views.scores')
 )
