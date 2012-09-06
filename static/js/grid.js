@@ -43,9 +43,9 @@ Grid.include({
     ben: "",
     brian: "",
     interval: 0,
-    init: function(interval) {
-        this.ben = new Player("Ben", true);
-        this.brian = new Player("Brian", false);
+    init: function(ben_teams, brian_teams, interval) {
+        this.ben = new Player("Ben", true, ben_teams);
+        this.brian = new Player("Brian", false, brian_teams);
         this.interval = interval;
     },
     configAjax: function() {
@@ -116,6 +116,14 @@ Grid.include({
                 }), "json");
             }), this.interval);
         }
+    },
+    parse_scores: function(data) {
+        game_data = $.parseJSON(data);
+        games = [];
+        for (game_hash in game_data) {
+            games.push(Game.init(game_hash["fields"]));
+        }
+        return games;
     },
     choose_delta_class: function(game) {
         var ben_team = this.choose_team(game, this.ben.teams);
@@ -200,9 +208,10 @@ Player.include({
     current_wins = "",
     final_wins = "",
     teams = "",
-    init: function(name, is_good_guy) {
+    init: function(name, is_good_guy, teams) {
         this.name = name;
         this.is_good_guy = is_good_guy;
+        this.teams = teams;
         this.reset_wins();
     },
     reset_wins: function() {
@@ -233,10 +242,10 @@ Game.include({
     home_team: "",
     away_team: "",
     time_left: "",
-    init: function(home_team, away_team, time_left) {
-        this.home_team = home_team;
-        this.away_team = away_team;
-        this.time_left = time_left;
+    init: function(data) {
+        this.home_team = Team.init(data['home_team'], data['home_score']);
+        this.away_team = Team.init(data['away_team'], data['away_score']);
+        this.time_left = data['time_left'];
     },
     is_final: function() {
         this.time_left == "Final";
