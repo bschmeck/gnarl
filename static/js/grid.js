@@ -242,7 +242,7 @@ Player.include({
         }
     },
     choose_team: function(game) {
-        return (game.away_team.name in this.teams) ? game.away_team : game.home_team;
+        return (this.teams.indexOf(game.away_team.name) > -1) ? game.away_team : game.home_team;
     }
 });
 

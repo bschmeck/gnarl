@@ -13,10 +13,14 @@ def index(request):
 
     wk = Week.objects.all()[0];
     for game in wk.games_set():
+        picked = game.picked_team
+        other = game.away_team if game.home_team == picked else game.home_team
         if game.picker == "BEN":
-            ben_teams.append(game.picked_team)
+            ben_teams.append(picked)
+            brian_teams.append(other)
         else:
-            brian_teams.append(game.picked_team)
+            brian_teams.append(picked)
+            ben_teams.append(other)
     interval = 1 * 60 * 1000
     return render_to_response('grid/index.html',
                               {'ben_teams': json.dumps(ben_teams),
