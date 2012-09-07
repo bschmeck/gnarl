@@ -180,7 +180,7 @@ Grid.include({
         var box = $('<div>').attr('class', 'box scorebox');
     
         box.html(this.build_table(game));
-        box.attr('class', this.choose_delta_class(game));
+        box.addClass(this.choose_delta_class(game));
         $(".games").append(box);
     },
     update_wins: function() {
