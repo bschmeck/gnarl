@@ -158,7 +158,7 @@ Grid.include({
         return ret;
     },
     choose_team: function(game, teams) {
-        return (game.away.name in teams) ? game.away : game.home;
+        return (game.away_team.name in teams) ? game.away_team : game.home_team;
     },
     build_team_row: function(team) {
         return $('<tr>')
@@ -166,8 +166,8 @@ Grid.include({
             .append($('<td>').attr('class', 'game_score').text(team.score));
     },
     build_table: function(game) {
-        var away_row = this.build_team_row(game.away);
-        var home_row = this.build_team_row(game.home);
+        var away_row = this.build_team_row(game.away_team);
+        var home_row = this.build_team_row(game.home_team);
         var time_row = $('<tr>')
             .append($('<td>'))
             .append($('<td>').attr('class', 'time').text(game.time_left));
