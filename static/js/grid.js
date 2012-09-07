@@ -199,7 +199,7 @@ Grid.include({
             this.ben.update(game);
             this.brian.update(game);
         }
-        this.update_win_totals();
+        this.update_wins();
     }
 });
             
