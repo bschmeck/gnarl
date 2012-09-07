@@ -189,6 +189,9 @@ Grid.include({
         $("#brian_wins > .current").text(this.brian.current_wins);
         $("#brian_wins > .wins").text(this.brian.final_wins);
     },
+    insert_clear_div: function() {
+        $(".games").append($("<div>").addClass("clear"));
+    },
     update_grid: function(games) {
         this.ben.reset_wins();
         this.brian.reset_wins();
@@ -198,6 +201,9 @@ Grid.include({
             this.display_game(game);
             this.ben.update(game);
             this.brian.update(game);
+            if (i % 4 == 3) {
+                this.insert_clear_div();
+            }
         }
         this.update_wins();
     }
