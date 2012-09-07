@@ -176,11 +176,12 @@ Grid.include({
             .append(time_row)
             .append(home_row);
     },
-    update_game: function(game) {
-        var box = $('#' + game.id);
+    display_game: function(game) {
+        var box = $('<div>').attr('class', 'box scorebox');
     
-        box.innerHTML(this.build_table(game));
+        box.html(this.build_table(game));
         box.attr('class', this.choose_delta_class(game));
+        $(".games").append(box);
     },
     update_wins: function() {
         $("#ben_wins > .current").text(this.ben.current_wins);
@@ -191,9 +192,10 @@ Grid.include({
     update_grid: function(games) {
         this.ben.reset_wins();
         this.brian.reset_wins();
+        $(".games").empty();
         for (var i=0; i < games.length; i++) {
             game = games[i];
-            this.update_game(game);
+            this.display_game(game);
             this.ben.update(game);
             this.brian.update(game);
         }
