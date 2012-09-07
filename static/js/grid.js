@@ -120,8 +120,8 @@ Grid.include({
     parse_scores: function(data) {
         game_data = $.parseJSON(data);
         games = [];
-        for (game_hash in game_data) {
-            games.push(new Game(game_hash["fields"]));
+        for (var i=0; i < game_data.length; i++) {
+            games.push(new Game(game_data[i].fields));
         }
         return games;
     },
@@ -191,7 +191,8 @@ Grid.include({
     update_grid: function(games) {
         this.ben.reset_wins();
         this.brian.reset_wins();
-        for (var game in games) {
+        for (var i=0; i < games.length; i++) {
+            game = games[i];
             this.update_game(game);
             this.ben.update(game);
             this.brian.update(game);
