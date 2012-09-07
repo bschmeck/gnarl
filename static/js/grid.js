@@ -143,7 +143,7 @@ Grid.include({
         }
 
         /* Set level of win/loss. */
-        delta = abs(delta);
+        delta = Math.abs(delta);
         if (game.is_final()) {
             ret += '4';
         } else if (delta > 14) {
