@@ -126,8 +126,8 @@ Grid.include({
         return games;
     },
     choose_delta_class: function(game) {
-        var ben_team = this.choose_team(game, this.ben.teams);
-        var brian_team = this.choose_team(game, this.brian.teams);
+        var ben_team = this.ben.choose_team(game);
+        var brian_team = this.brian.choose_team(game);
         if (this.ben.is_good_guy) {
             delta = ben_team.score - brian_team.score;
         } else {
@@ -156,9 +156,6 @@ Grid.include({
             ret += '1';
         }
         return ret;
-    },
-    choose_team: function(game, teams) {
-        return (game.away_team.name in teams) ? game.away_team : game.home_team;
     },
     build_team_row: function(team) {
         return $('<tr>')
@@ -243,6 +240,9 @@ Player.include({
         if (game.is_final()) {
             this.final_wins += 1;
         }
+    },
+    choose_team: function(game) {
+        return (game.away_team.name in this.teams) ? game.away_team : game.home_team;
     }
 });
 
