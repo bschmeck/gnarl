@@ -171,7 +171,7 @@ Grid.include({
         var time_row = $('<tr>')
             .append($('<td>'))
             .append($('<td>').attr('class', 'time').text(game.time_left));
-        $('<table>').attr('class', 'score')
+        return $('<table>').attr('class', 'score')
             .append(away_row)
             .append(time_row)
             .append(home_row);
