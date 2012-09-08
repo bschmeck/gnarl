@@ -43,6 +43,7 @@ Grid.include({
     ben: "",
     brian: "",
     interval: 0,
+    scores_url: "scores/",
     init: function(ben_teams, brian_teams, interval) {
         this.ben = new Player("Ben", true, ben_teams);
         this.brian = new Player("Brian", false, brian_teams);
@@ -105,15 +106,16 @@ Grid.include({
             $('.bad_guy').click();
         }
 
-        /* Start checking for updated scores. */
+        /* Pull down the game data. */
+        $.get(this.scores_url, this.proxy(this.got_scores), "json");
+    },
+    got_scores: function(data) {
+        /* Turn JSON into an array of games. */
+        var games = this.parse_scores(data);
+        this.update_grid(games);
         if (this.interval > 0) {
             setInterval(this.proxy(function() {
-                var scores_url = "scores/";
-                $.get(scores_url, this.proxy(function(data) {
-                    /* Turn JSON into an array of games. */
-                    var games = this.parse_scores(data);
-                    this.update_grid(games);
-                }), "json");
+                $.get(this.scores_url, this.proxy(this.got_scores), "json");
             }), this.interval);
         }
     },
