@@ -259,7 +259,7 @@ Game.include({
         this.time_left = data['time_left'];
     },
     is_final: function() {
-        this.time_left == "Final";
+        return this.time_left == "Final";
     }
 });
 
