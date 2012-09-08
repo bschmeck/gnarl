@@ -10,6 +10,9 @@ class Week(models.Model):
     def __unicode__(self):
         return "Week %d" % self.number
 
+    class Meta:
+        get_latest_by = 'start_date'
+        
 class Game(models.Model):
     PICKER_CHOICES = (
         ("BEN", "Ben"),

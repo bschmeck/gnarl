@@ -11,7 +11,7 @@ def index(request):
     ben_teams = []
     brian_teams = []
 
-    wk = Week.objects.all()[0];
+    wk = Week.objects.latest()
     for game in wk.game_set.all():
         picked = game.picked_team
         other = game.away_team if game.home_team == picked else game.home_team
@@ -30,5 +30,6 @@ def index(request):
                               context_instance=RequestContext(request))
 
 def scores(request):
-    ret = []
-    return HttpResponse(json.dumps(ret), "application/javascript")
+    wk = Week.objects.latest()
+    games = wk.game_set.all()
+    return HttpResponse(json.dumps(games), "application/javascript")
