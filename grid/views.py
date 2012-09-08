@@ -12,7 +12,7 @@ def index(request):
     brian_teams = []
 
     wk = Week.objects.all()[0];
-    for game in wk.games_set():
+    for game in wk.game_set.all():
         picked = game.picked_team
         other = game.away_team if game.home_team == picked else game.home_team
         if game.picker == "BEN":
