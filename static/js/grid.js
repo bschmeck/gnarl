@@ -120,10 +120,9 @@ Grid.include({
         }
     },
     parse_scores: function(data) {
-        game_data = $.parseJSON(data);
         games = [];
-        for (var i=0; i < game_data.length; i++) {
-            games.push(new Game(game_data[i].fields));
+        for (var i=0; i < data.length; i++) {
+            games.push(new Game(data[i].fields));
         }
         return games;
     },
