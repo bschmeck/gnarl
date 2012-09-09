@@ -44,6 +44,8 @@ class Scraper(models.Model):
                 home_team = parsed_game[2].strip()
                 home_score = 0
 
+            if time_left == "Final OT":
+                time_left = "Final"
             game = week.game_set.get(away_team=away_team)
             game.away_score = away_score
             game.home_score = home_score
