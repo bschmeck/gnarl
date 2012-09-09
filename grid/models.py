@@ -77,3 +77,15 @@ class Game(models.Model):
 
     def __unicode__(self):
         return "%s @ %s - Week %d" % (self.away_team, self.home_team, self.week.number)
+
+    def is_final(self):
+        return self.time_left == "Final"
+
+    def in_progress(self):
+        if "QTR" in self.time_left:
+            return True
+        elif "OT" in self.time_left:
+            return True
+        elif "Halftime" in self.time_left:
+            return True
+        return False
