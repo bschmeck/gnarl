@@ -114,7 +114,7 @@ Grid.include({
         var games = this.parse_scores(data);
         this.update_grid(games);
         if (this.interval > 0) {
-            setInterval(this.proxy(function() {
+            setTimeout(this.proxy(function() {
                 $.get(this.scores_url, this.proxy(this.got_scores), "json");
             }), this.interval);
         }
