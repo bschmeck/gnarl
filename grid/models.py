@@ -11,12 +11,20 @@ class Scraper(models.Model):
 
     def scrape(self):
         week = Week.objects.latest()
-        br = Browser()
-        res = br.open(week.scoreboard_url)
-        content = res.read()
+        all_done = True
+        for game in week.game_set.all():
+            if not game.is_final():
+                all_done = False
+                break
+        if all_done:
+            return
+        
         parser = ScoreboardParser()
         for table in re.findall('<table class="data.*?</table>', content):
             parser.feed(table)
+        br = Browser()
+        res = br.open(week.scoreboard_url)
+        content = res.read()
         for parsed_game in parser.scores:
             if len(parsed_game) == 5:
                 time_left = parsed_game[0]
