@@ -91,7 +91,7 @@ Grid.include({
         this.configAjax();
 
         /* Link up event handlers. */
-        $('.good_guy_choice').click(function(e){
+        $('.good_guy_choice').click(this.proxy(function(e){
             $('.scorebox.win1, .scorebox.loss1').toggleClass('win1 loss1');
             $('.scorebox.win2, .scorebox.loss2').toggleClass('win2 loss2');
             $('.scorebox.win3, .scorebox.loss3').toggleClass('win3 loss3');
@@ -99,7 +99,7 @@ Grid.include({
             $('.good_guy_choice').toggleClass('good_guy bad_guy');
             this.ben.is_good_guy = !this.ben.is_good_guy;
             this.brian.is_good_guy = !this.brian.is_good_guy;
-        });
+        }));
 
         /* Ben is the default good guy, unless told otherwise. */
         if (location.hash == '#brian') {
