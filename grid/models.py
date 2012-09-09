@@ -27,16 +27,16 @@ class Scraper(models.Model):
         content = res.read()
         for parsed_game in parser.scores:
             if len(parsed_game) == 5:
-                time_left = parsed_game[0]
-                away_team = parsed_game[1]
-                away_score = parsed_game[2]
-                home_team = parsed_game[3]
-                home_score = parsed_game[4]
+                time_left = parsed_game[0].strip()
+                away_team = parsed_game[1].strip()
+                away_score = parsed_game[2].strip()
+                home_team = parsed_game[3].strip()
+                home_score = parsed_game[4].strip()
             else:
-                time_left = parsed_game[0]
-                away_team = parsed_game[1]
+                time_left = parsed_game[0].strip()
+                away_team = parsed_game[1].strip()
                 away_score = 0
-                home_team = parsed_game[2]
+                home_team = parsed_game[2].strip()
                 home_score = 0
 
             game = week.game_set.get(away_team=away_team)
