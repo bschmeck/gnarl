@@ -1,6 +1,6 @@
 from django.db import models
 
-from datetime import date, datetime
+from datetime import date, datetime, timedelta
 from mechanize import Browser
 import re
 
@@ -10,6 +10,9 @@ class Scraper(models.Model):
     run_at = models.DateTimeField()
 
     def scrape(self):
+        if self.run_at > datetime.now():
+            return
+        
         week = Week.objects.latest()
         all_done = True
         for game in week.game_set.all():
@@ -19,12 +22,14 @@ class Scraper(models.Model):
         if all_done:
             return
         
-        parser = ScoreboardParser()
-        for table in re.findall('<table class="data.*?</table>', content):
-            parser.feed(table)
         br = Browser()
         res = br.open(week.scoreboard_url)
         content = res.read()
+        parser = ScoreboardParser()
+        for table in re.findall('<table class="data.*?</table>', content):
+            parser.feed(table)
+        next_run = datetime.now() + timedelta(days=1)
+        
         for parsed_game in parser.scores:
             if len(parsed_game) == 5:
                 time_left = parsed_game[0].strip()
@@ -44,7 +49,18 @@ class Scraper(models.Model):
             game.home_score = home_score
             game.time_left = time_left
             game.save()
-            
+
+            if game.in_progress():
+                next_run = datetime.now()
+            elif not game.is_final():
+                now = datetime.now()
+                kickoff = datetime.strptime(game.time_left, "%I:%M %p")
+                gametime = datetime(year=now.year, month=now.month, day=now.day, hour=kickoff.hour-1, minute=kickoff.minute)
+
+                next_run = min(next_run, gametime)
+        self.run_at = next_run
+        self.save()
+        
 class Week(models.Model):
     start_date = models.DateField('Date')
     number = models.IntegerField()
