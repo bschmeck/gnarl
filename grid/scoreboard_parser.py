@@ -29,7 +29,7 @@ class ScoreboardParser(HTMLParser):
     def handle_data(self, data):
         if not self.get_data:
             return
-        self.cur_game.append(data)
+        self.cur_game.append(data.strip())
         self.get_data = False
     
             
