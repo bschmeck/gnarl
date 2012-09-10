@@ -10,9 +10,11 @@ class Scraper(models.Model):
     run_at = models.DateTimeField()
 
     def scrape(self):
+        # If our next scheduled scrape is in the future, we're done
         if self.run_at > datetime.now():
             return
         
+        # If all games this week are final, we're done
         week = Week.objects.latest()
         all_done = True
         for game in week.game_set.all():
@@ -22,14 +24,20 @@ class Scraper(models.Model):
         if all_done:
             return
         
+        # Pull in the scoreboard and parse all the tables with class 'data'
+        # The parser will ignore non-scoreboard tables
         br = Browser()
         res = br.open(week.scoreboard_url)
         content = res.read()
         parser = ScoreboardParser()
         for table in re.findall('<table class="data.*?</table>', content):
             parser.feed(table)
+
+        # After parsing each game we'll figure out when that games needs
+        # to be scraped again, and the next scheduled run for the scraper
+        # will be the soonest of all of those dates.  Start with a default
+        # that's one day away.
         next_run = datetime.now() + timedelta(days=1)
-        
         for parsed_game in parser.scores:
             if len(parsed_game) == 5:
                 time_left = parsed_game[0].strip()
@@ -53,11 +61,18 @@ class Scraper(models.Model):
             game.save()
 
             if game.in_progress():
-                next_run = datetime.now()
+                # If the game is in progress, we want to scrape it again right away
+                next_run = min(next_run, datetime.now())
             elif not game.is_final():
+                # If the game hasn't started yet, then we don't need to scrape it until it starts
                 now = datetime.now()
                 kickoff = datetime.strptime(game.time_left, "%I:%M %p")
+                # Times are given in Eastern time, our server is Central, so adjust the hour
                 gametime = datetime(year=now.year, month=now.month, day=now.day, hour=kickoff.hour-1, minute=kickoff.minute)
+                # We don't know on which day a game is played, so if the time is in the past, assume the game happens
+                # tomorrow.  Allow for 15 mins of wiggle room in case our clock and CBS' clock don't match.
+                if gametime + timedelta(minutes=15) < datetime.now():
+                    gametime += timedelta(days=1)
 
                 next_run = min(next_run, gametime)
         self.run_at = next_run
