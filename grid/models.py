@@ -79,17 +79,20 @@ class Scraper(models.Model):
         self.save()
         
 class Week(models.Model):
+    class Meta:
+        get_latest_by = 'start_date'
+
     start_date = models.DateField('Date')
     number = models.IntegerField()
     scoreboard_url = models.CharField(max_length=255)
 
     def __unicode__(self):
         return "Week %d" % self.number
-
-    class Meta:
-        get_latest_by = 'start_date'
         
 class Game(models.Model):
+    class Meta:
+        ordering = ["pk"]
+
     PICKER_CHOICES = (
         ("BEN", "Ben"),
         ("BRIAN", "Brian"),
