@@ -91,7 +91,7 @@ class Week(models.Model):
         
 class Game(models.Model):
     class Meta:
-        ordering = ["pk"]
+        ordering = ["id"]
 
     PICKER_CHOICES = (
         ("BEN", "Ben"),
