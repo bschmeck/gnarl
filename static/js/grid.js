@@ -41,7 +41,9 @@ var Class = function() {
 var Grid = new Class;
 Grid.include({
     ben: "",
+    ben_games: 0,
     brian: "",
+    brian_games: 0,
     interval: 0,
     scores_url: "scores/",
     init: function(ben_teams, brian_teams, interval) {
@@ -185,7 +187,19 @@ Grid.include({
         if (game.anti_lock) {
             box.addClass("anti_lock");
         }
-        $(".games").append(box);
+        if (game.picker == "BEN") {
+            $('#ben_games').append(box);
+            this.ben_games++;
+            if (this.ben_games % 2 == 0) {
+                this.insert_clear_div('#ben_games');
+            }
+        } else {
+            $('#brian_games').append(box);
+            this.brian_games++;
+            if (this.brian_games % 2 == 0) {
+                this.insert_clear_div('#brian_games');
+            }
+        }
     },
     update_wins: function() {
         $("#ben_wins > .current").text(this.ben.current_wins);
@@ -193,21 +207,20 @@ Grid.include({
         $("#brian_wins > .current").text(this.brian.current_wins);
         $("#brian_wins > .wins").text(this.brian.final_wins);
     },
-    insert_clear_div: function() {
-        $(".games").append($("<div>").addClass("clear"));
+    insert_clear_div: function(selector) {
+        $(selector).append($("<div>").addClass("clear"));
     },
     update_grid: function(games) {
         this.ben.reset_wins();
+        this.ben_games = 0;
         this.brian.reset_wins();
+        this.brian_wins = 0;
         $(".games").empty();
         for (var i=0; i < games.length; i++) {
             game = games[i];
             this.display_game(game);
             this.ben.update(game);
             this.brian.update(game);
-            if (i % 4 == 3) {
-                this.insert_clear_div();
-            }
         }
         this.update_wins();
     }
@@ -259,6 +272,7 @@ Game.include({
     away_team: "",
     home_team: "",
     lock: false,
+    picker: '',
     time_left: "",
     init: function(data) {
         this.home_team = new Team(data['home_team'], data['home_score']);
@@ -266,6 +280,7 @@ Game.include({
         this.time_left = data['time_left'];
         this.lock = data['lock'];
         this.anti_lock = data['anti_lock'];
+        this.picker = data['picker'];
     },
     is_final: function() {
         return this.time_left == "Final";
