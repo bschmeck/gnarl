@@ -108,3 +108,9 @@ table.score {
 	background: rgba(35, 186, 35, 1.0);
 	border: 3px solid #acbfac;
 }
+.lock {
+	border: 3px solid black;
+}
+.anti_lock {
+	border: 3px dashed black;
+}

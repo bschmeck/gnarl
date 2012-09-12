@@ -179,6 +179,12 @@ Grid.include({
     
         box.html(this.build_table(game));
         box.addClass(this.choose_delta_class(game));
+        if (game.lock) {
+            box.addClass("lock");
+        }
+        if (game.anti_lock) {
+            box.addClass("anti_lock");
+        }
         $(".games").append(box);
     },
     update_wins: function() {
@@ -249,13 +255,17 @@ Player.include({
 
 var Game = new Class;
 Game.include({
-    home_team: "",
+    anti_lock: false,
     away_team: "",
+    home_team: "",
+    lock: false,
     time_left: "",
     init: function(data) {
         this.home_team = new Team(data['home_team'], data['home_score']);
         this.away_team = new Team(data['away_team'], data['away_score']);
         this.time_left = data['time_left'];
+        this.lock = data['lock'];
+        this.anti_lock = data['anti_lock'];
     },
     is_final: function() {
         return this.time_left == "Final";
