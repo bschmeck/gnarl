@@ -101,6 +101,7 @@ Grid.include({
             $('.good_guy_choice').toggleClass('good_guy bad_guy');
             this.ben.is_good_guy = !this.ben.is_good_guy;
             this.brian.is_good_guy = !this.brian.is_good_guy;
+            this.update_wins();
         }));
 
         /* Ben is the default good guy, unless told otherwise. */
@@ -201,11 +202,26 @@ Grid.include({
             }
         }
     },
+    current_win_totals: function() {
+        var wins = this.ben.is_good_guy ? this.ben.current_wins : this.brian.current_wins;
+        var losses = this.ben.is_good_guy ? this.brian.current_wins : this.ben.current_wins;
+        var ties = this.ben_games + this.brian_games - wins - losses;
+        return wins + "-" + losses + "-" + ties;
+    },
+    final_win_totals: function() {
+        var wins = this.ben.is_good_guy ? this.ben.final_wins : this.brian.final_wins;
+        var losses = this.ben.is_good_guy ? this.brian.final_wins : this.ben.final_wins;
+        return wins + "-" + losses;
+    },
     update_wins: function() {
+        $("#current_wins").text(this.current_win_totals());
+        $("#final_wins").text(this.final_win_totals());
         $("#ben_wins > .current").text(this.ben.current_wins);
         $("#ben_wins > .wins").text(this.ben.final_wins);
+        $("#ben_wins > .max_wins").text(this.ben.max_wins);
         $("#brian_wins > .current").text(this.brian.current_wins);
         $("#brian_wins > .wins").text(this.brian.final_wins);
+        $("#brian_wins > .max_wins").text(this.brian.max_wins);
     },
     insert_clear_div: function(selector) {
         $(selector).append($("<div>").addClass("clear"));
@@ -231,9 +247,10 @@ var Player = new Class;
 Player.include({
     name: "",
     is_good_guy: "",
-    current_wins: "",
-    final_wins: "",
+    current_wins: 0,
+    final_wins: 0,
     teams: "",
+    max_wins: 0,
     init: function(name, is_good_guy, teams) {
         this.name = name;
         this.is_good_guy = is_good_guy;
@@ -243,6 +260,7 @@ Player.include({
     reset_wins: function() {
         this.current_wins = 0;
         this.final_wins = 0;
+        this.max_wins = this.teams.length;
     },
     update: function(game) {
         /* Figure out who's winner.  Nothing to do if it's a tie. */
@@ -253,12 +271,13 @@ Player.include({
         /* Is the winning team our team? Nothing to do if it isn't. */
         var good_team = this.choose_team(game, this.teams);
         var winner = delta > 0 ? game.home_team : game.away_team;
-        if (winner != good_team) {
-            return;
-        }
-        this.current_wins += 1;
-        if (game.is_final()) {
-            this.final_wins += 1;
+        if (winner == good_team) {
+            this.current_wins++;
+            if (game.is_final()) {
+                this.final_wins++;
+            }
+        } else if (game.is_final()) {
+            this.max_wins--;
         }
     },
     choose_team: function(game) {
