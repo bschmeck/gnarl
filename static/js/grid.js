@@ -283,7 +283,7 @@ Player.include({
         }
         /* Did we pick this game?  If so, update pick totals. */
         if (this.name.toUpperCase() == game.picker) {
-            if (winner == game.picked_team) {
+            if (winner.name == game.picked_team) {
                 this.picked_wins++;
                 if (game.is_final()) {
                     this.picked_finals++;
@@ -305,6 +305,7 @@ Game.include({
     home_team: "",
     lock: false,
     picker: '',
+    picked_team: '',
     time_left: "",
     init: function(data) {
         this.home_team = new Team(data['home_team'], data['home_score']);
@@ -313,6 +314,7 @@ Game.include({
         this.lock = data['lock'];
         this.anti_lock = data['anti_lock'];
         this.picker = data['picker'];
+        this.picked_team = data['picked_team'];
     },
     is_final: function() {
         return this.time_left == "Final";
