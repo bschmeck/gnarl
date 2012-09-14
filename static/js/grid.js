@@ -230,7 +230,7 @@ Grid.include({
         this.ben.reset_wins();
         this.ben_games = 0;
         this.brian.reset_wins();
-        this.brian_wins = 0;
+        this.brian_games = 0;
         $(".games").empty();
         for (var i=0; i < games.length; i++) {
             game = games[i];
@@ -260,7 +260,7 @@ Player.include({
     reset_wins: function() {
         this.current_wins = 0;
         this.final_wins = 0;
-        this.max_wins = this.teams.length;
+        this.max_wins = this.teams.length / 2;
     },
     update: function(game) {
         /* Figure out who's winner.  Nothing to do if it's a tie. */
