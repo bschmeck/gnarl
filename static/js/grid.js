@@ -216,11 +216,11 @@ Grid.include({
     update_wins: function() {
         $("#current_wins").text(this.current_win_totals());
         $("#final_wins").text(this.final_win_totals());
-        $("#ben_wins > .current").text(this.ben.current_wins);
-        $("#ben_wins > .wins").text(this.ben.final_wins);
+        $("#ben_wins > .current").text(this.ben.picked_wins);
+        $("#ben_wins > .wins").text(this.ben.picked_finals);
         $("#ben_wins > .max_wins").text(this.ben.max_wins);
-        $("#brian_wins > .current").text(this.brian.current_wins);
-        $("#brian_wins > .wins").text(this.brian.final_wins);
+        $("#brian_wins > .current").text(this.brian.picked_wins);
+        $("#brian_wins > .wins").text(this.brian.picked_finals);
         $("#brian_wins > .max_wins").text(this.brian.max_wins);
     },
     insert_clear_div: function(selector) {
@@ -251,6 +251,8 @@ Player.include({
     final_wins: 0,
     teams: "",
     max_wins: 0,
+    picked_wins: 0,
+    picked_finals: 0,
     init: function(name, is_good_guy, teams) {
         this.name = name;
         this.is_good_guy = is_good_guy;
@@ -260,6 +262,8 @@ Player.include({
     reset_wins: function() {
         this.current_wins = 0;
         this.final_wins = 0;
+        this.picked_wins = 0;
+        this.picked_finals = 0;
         this.max_wins = this.teams.length / 2;
     },
     update: function(game) {
@@ -276,8 +280,17 @@ Player.include({
             if (game.is_final()) {
                 this.final_wins++;
             }
-        } else if (game.is_final()) {
-            this.max_wins--;
+        }
+        /* Did we pick this game?  If so, update pick totals. */
+        if (this.name.toUpperCase() == game.picker) {
+            if (winner == game.picked_team) {
+                this.picked_wins++;
+                if (game.is_final()) {
+                    this.picked_finals++;
+                }
+            } else if (game.is_final()) {
+                this.max_wins--;
+            }
         }
     },
     choose_team: function(game) {
