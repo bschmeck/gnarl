@@ -120,3 +120,6 @@ table.score {
 .anti_lock {
 	border: 3px dashed blue;
 }
+.picked_team {
+    font-weight: bold;
+}

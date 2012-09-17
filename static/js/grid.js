@@ -161,14 +161,15 @@ Grid.include({
         }
         return ret;
     },
-    build_team_row: function(team) {
+    build_team_row: function(team, picked) {
+        var team_class = picked ? 'team_name picked_team' : 'team_name';
         return $('<tr>')
-            .append($('<td>').attr('class', 'team_name').text(team.name))
+            .append($('<td>').attr('class', team_class).text(team.name))
             .append($('<td>').attr('class', 'game_score').text(team.score));
     },
     build_table: function(game) {
-        var away_row = this.build_team_row(game.away_team);
-        var home_row = this.build_team_row(game.home_team);
+        var away_row = this.build_team_row(game.away_team, game.away_picked());
+        var home_row = this.build_team_row(game.home_team, game.home_picked());
         var time_row = $('<tr>')
             .append($('<td>'))
             .append($('<td>').attr('class', 'time').text(game.time_left));
@@ -318,6 +319,12 @@ Game.include({
     },
     is_final: function() {
         return this.time_left == "Final";
+    },
+    away_picked: function() {
+        return this.picked_team == this.away_team.name;
+    },
+    home_picked: function() {
+        return this.picked_team == this.home_team.name;
     }
 });
 
