@@ -115,8 +115,8 @@ table.score {
 	border: 3px solid #acbfac;
 }
 .lock {
-	border: 3px solid black;
+	border: 3px solid blue;
 }
 .anti_lock {
-	border: 3px dashed black;
+	border: 3px dashed blue;
 }
