@@ -54,7 +54,11 @@ class Scraper(models.Model):
 
             if time_left == "Final OT":
                 time_left = "Final"
-            game = week.game_set.get(away_team=away_team)
+            try:
+                game = week.game_set.get(away_team=away_team)
+            except Game.DoesNotExist:
+                print "Cannot find game with", away_team
+                next
             game.away_score = away_score
             game.home_score = home_score
             game.time_left = time_left
