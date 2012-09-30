@@ -56,29 +56,30 @@ class Scraper(models.Model):
                 time_left = "Final"
             try:
                 game = week.game_set.get(away_team=away_team)
+
+                game.away_score = away_score
+                game.home_score = home_score
+                game.time_left = time_left
+                game.save()
+
+                if game.in_progress():
+                    # If the game is in progress, we want to scrape it again right away
+                    next_run = min(next_run, datetime.now())
+                elif not game.is_final():
+                    # If the game hasn't started yet, then we don't need to scrape it until it starts
+                    now = datetime.now()
+                    kickoff = datetime.strptime(game.time_left, "%I:%M %p")
+                    # Times are given in Eastern time, our server is Central, so adjust the hour
+                    gametime = datetime(year=now.year, month=now.month, day=now.day, hour=kickoff.hour-1, minute=kickoff.minute)
+                    # We don't know on which day a game is played, so if the time is in the past, assume the game happens
+                    # tomorrow.  Allow for 15 mins of wiggle room in case our clock and CBS' clock don't match.
+                    if gametime + timedelta(minutes=15) < datetime.now():
+                        gametime += timedelta(days=1)
+
+                    next_run = min(next_run, gametime)
             except Game.DoesNotExist:
                 print "Cannot find game with", away_team
-                next
-            game.away_score = away_score
-            game.home_score = home_score
-            game.time_left = time_left
-            game.save()
-
-            if game.in_progress():
-                # If the game is in progress, we want to scrape it again right away
-                next_run = min(next_run, datetime.now())
-            elif not game.is_final():
-                # If the game hasn't started yet, then we don't need to scrape it until it starts
-                now = datetime.now()
-                kickoff = datetime.strptime(game.time_left, "%I:%M %p")
-                # Times are given in Eastern time, our server is Central, so adjust the hour
-                gametime = datetime(year=now.year, month=now.month, day=now.day, hour=kickoff.hour-1, minute=kickoff.minute)
-                # We don't know on which day a game is played, so if the time is in the past, assume the game happens
-                # tomorrow.  Allow for 15 mins of wiggle room in case our clock and CBS' clock don't match.
-                if gametime + timedelta(minutes=15) < datetime.now():
-                    gametime += timedelta(days=1)
-
-                next_run = min(next_run, gametime)
+            
         self.run_at = next_run
         self.save()
         
