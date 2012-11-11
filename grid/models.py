@@ -30,7 +30,7 @@ class Scraper(models.Model):
         res = br.open(week.scoreboard_url)
         content = res.read()
         parser = ScoreboardParser()
-        for table in re.findall('<table class="data.*?</table>', content):
+        for table in re.findall('<table class="lineScore.*?</table>', content):
             parser.feed(table)
 
         # After parsing each game we'll figure out when that games needs
