@@ -144,6 +144,14 @@ Grid.include({
             ret = 'loss';
         } else if (delta > 0) {
             ret = 'win';
+        } else if (delta == 0 && game.is_final()) {
+            /* Handle a tie. */
+            if ((this.ben.is_good_guy && game.picker == this.ben.name.toUpperCase()) ||
+                (this.brian.is_good_guy && game.picker == this.brian.name.toUpperCase())) {
+                ret = 'loss';
+            } else {
+                ret = 'win';
+            }
         }
 
         /* Set level of win/loss. */
@@ -268,14 +276,22 @@ Player.include({
         this.max_wins = this.teams.length / 2;
     },
     update: function(game) {
-        /* Figure out who's winner.  Nothing to do if it's a tie. */
+        /* Figure out who's winner.  Nothing to do if it's a tie and the game isn't final. */
         var delta = game.home_team.score - game.away_team.score;
-        if (delta == 0) {
+        if (delta == 0 && !game.is_final()) {
             return;
         }
         /* Is the winning team our team? Nothing to do if it isn't. */
         var good_team = this.choose_team(game, this.teams);
         var winner = delta > 0 ? game.home_team : game.away_team;
+        if (delta == 0) {
+            /* Did we pick this game?  If so, tie == loss, o/w tie == win. */
+            if (this.name.toUpperCase() == game.picker) {
+                winner = 'loss';
+            } else {
+                winner = good_team;
+            }
+        }
         if (winner == good_team) {
             this.current_wins++;
             if (game.is_final()) {
