@@ -1,6 +1,4 @@
-from grid.models.game import Game
-from grid.models.scraper import Scraper
-from grid.models.week import Week
+from grid.models import Game, Scraper, Week
 from django.contrib import admin
 
 admin.site.register(Game)
