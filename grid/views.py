@@ -6,7 +6,8 @@ from django.template.loader import get_template
 
 import json
 
-from models import Game, Week
+from models.game import Game
+from models.week import Week
 
 def index(request):
     ben_teams = []

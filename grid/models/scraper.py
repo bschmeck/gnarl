@@ -1,12 +1,18 @@
 from django.db import models
 
-from datetime import date, datetime, timedelta
+from datetime import datetime, timedelta
 from mechanize import Browser
 import re
 
 from grid.scoreboard_parser import ScoreboardParser
 
+from game import Game
+from week import Week
+
 class Scraper(models.Model):
+    class Meta:
+        app_label = 'grid'
+        
     run_at = models.DateTimeField()
 
     def scrape(self):
@@ -83,50 +89,3 @@ class Scraper(models.Model):
         self.run_at = next_run
         self.save()
         
-class Week(models.Model):
-    class Meta:
-        get_latest_by = 'start_date'
-
-    start_date = models.DateField('Date')
-    number = models.IntegerField()
-    scoreboard_url = models.CharField(max_length=255)
-
-    def __unicode__(self):
-        return "Week %d" % self.number
-        
-class Game(models.Model):
-    class Meta:
-        ordering = ["id"]
-
-    PICKER_CHOICES = (
-        ("BEN", "Ben"),
-        ("BRIAN", "Brian"),
-    )
-    home_team = models.CharField(max_length=3)
-    home_score = models.IntegerField()
-    away_team = models.CharField(max_length=3)
-    away_score = models.IntegerField()
-
-    week = models.ForeignKey(Week)
-
-    picked_team = models.CharField(max_length=3)
-    picker = models.CharField(max_length=5, choices=PICKER_CHOICES)
-    lock = models.BooleanField(default=False)
-    anti_lock = models.BooleanField(default=False)
-
-    time_left = models.CharField(max_length=100)
-
-    def __unicode__(self):
-        return "%s @ %s - Week %d" % (self.away_team, self.home_team, self.week.number)
-
-    def is_final(self):
-        return self.time_left == "Final"
-
-    def in_progress(self):
-        if "QTR" in self.time_left:
-            return True
-        elif "OT" in self.time_left:
-            return True
-        elif "Halftime" in self.time_left:
-            return True
-        return False
