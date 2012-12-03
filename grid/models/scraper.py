@@ -3,6 +3,7 @@ from django.db import models
 from datetime import datetime, timedelta
 from mechanize import Browser
 import re
+import urllib2
 
 from grid.scoreboard_parser import ScoreboardParser
 
@@ -32,9 +33,14 @@ class Scraper(models.Model):
         
         # Pull in the scoreboard and parse all the tables with class 'data'
         # The parser will ignore non-scoreboard tables
-        br = Browser()
-        res = br.open(week.scoreboard_url)
-        content = res.read()
+        try:
+            br = Browser()
+            res = br.open(week.scoreboard_url)
+            content = res.read()
+        except urllib2.URLError:
+            print "Unable to connect to", week.scoreboard_url
+            return
+        
         parser = ScoreboardParser()
         for table in re.findall('<table class="lineScore.*?</table>', content):
             parser.feed(table)
