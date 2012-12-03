@@ -14,7 +14,7 @@ class ScoreboardParser(HTMLParser):
         elif tag == 'td':
             if ('class', 'name') in attrs:
                 self.get_name = True
-            elif ('class', 'finalscore') in attrs:
+            elif ('class', 'finalScore') in attrs:
                 self.get_data = True
             elif ('class', 'label') in attrs and ('align', 'left') in attrs:
                 self.get_data = True
