@@ -11,3 +11,9 @@ class Week(models.Model):
 
     def __unicode__(self):
         return "Week %d" % self.number
+
+    def all_games_final(self):
+        for game in self.game_set.all():
+            if not game.is_final():
+                return False
+        return True

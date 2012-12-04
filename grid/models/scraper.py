@@ -24,31 +24,44 @@ class Scraper(models.Model):
         time.sleep(20)
         run_scraper()
     
-    def run_scraper(self):
-        # If our next scheduled scrape is in the future, we're done
-        if self.run_at > datetime.now():
-            return
+    def time_to_scrape(self):
+        # If our next scheduled scrape is in the future, we don't need to scrape
+        return self.run_at <= datetime.now()
+
+    # We need to run the scraper if:
+    # 1. We have a week to scrape
+    # 2. The scheduled scrape is not in the future
+    # 3. The week has games which are not final
+    def need_scrape(self):
+        if not self.week:
+            return False
+
+        if not time_to_scrape():
+            return False
+            
+        return not self.week.all_games_final()
         
-        # If all games this week are final, we're done
-        week = Week.objects.latest()
-        all_done = True
-        for game in week.game_set.all():
-            if not game.is_final():
-                all_done = False
-                break
-        if all_done:
-            return
-        
-        # Pull in the scoreboard and parse all the tables with class 'data'
-        # The parser will ignore non-scoreboard tables
+    def scoreboard_content(self):
         try:
             br = Browser()
             res = br.open(week.scoreboard_url)
             content = res.read()
         except urllib2.URLError:
             print "Unable to connect to", week.scoreboard_url
+            content = None
+        return content        
+
+    def run_scraper(self):
+        self.week = Week.objects.latest()
+        if not need_scrape():
             return
-        
+
+        # Pull in the scoreboard and parse all the tables with class 'data'
+        # The parser will ignore non-scoreboard tables
+        # Make sure we have content before parsing
+        content = scoreboard_content()
+        if not content:
+            return
         parser = ScoreboardParser()
         for table in re.findall('<table class="lineScore.*?</table>', content):
             parser.feed(table)
