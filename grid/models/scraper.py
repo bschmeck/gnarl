@@ -71,28 +71,13 @@ class Scraper(models.Model):
         # will be the soonest of all of those dates.  Start with a default
         # that's one day away.
         next_run = datetime.now() + timedelta(days=1)
-        for parsed_game in parser.scores:
-            if len(parsed_game) == 5:
-                time_left = parsed_game[0]
-                away_team = parsed_game[1]
-                away_score = parsed_game[2]
-                home_team = parsed_game[3]
-                home_score = parsed_game[4]
-            else:
-                time_left = parsed_game[0]
-                away_team = parsed_game[1]
-                away_score = 0
-                home_team = parsed_game[2]
-                home_score = 0
-
-            if time_left == "Final OT":
-                time_left = "Final"
+        for parsed_game in parser.games:
             try:
-                game = week.game_set.get(away_team=away_team)
+                game = week.game_set.get(away_team=parsed_game.away_team)
 
-                game.away_score = away_score
-                game.home_score = home_score
-                game.time_left = time_left
+                game.away_score = parsed_game.away_score
+                game.home_score = parsed_game.home_score
+                game.time_left = parsed_game.time_left
                 game.save()
 
                 if game.in_progress():

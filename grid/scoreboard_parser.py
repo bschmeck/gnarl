@@ -1,9 +1,11 @@
 from HTMLParser import HTMLParser
 
+from parsed_game import ParsedGame
+
 class ScoreboardParser(HTMLParser):
     def __init__(self):
         HTMLParser.__init__(self)
-        self.scores = []
+        self.games = []
         self.cur_game = None
         self.get_data = False
         self.get_name = False
@@ -25,7 +27,7 @@ class ScoreboardParser(HTMLParser):
                     self.get_name = False
     def handle_endtag(self, tag):
         if tag == 'table':
-            self.scores.append(self.cur_game)
+            self.games.append(ParsedGame(self.cur_game))
     def handle_data(self, data):
         if not self.get_data:
             return
