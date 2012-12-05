@@ -3,7 +3,6 @@ from django.db import models
 from datetime import datetime, timedelta
 from mechanize import Browser
 import re
-import time
 import urllib2
 
 from grid.scoreboard_parser import ScoreboardParser
@@ -17,13 +16,6 @@ class Scraper(models.Model):
         
     run_at = models.DateTimeField()
 
-    # The cron job can only call us once a minute.  To scrape more frequently
-    # we need to run the scraper multiple times when called by cron.
-    def scrape(self):
-        run_scraper()
-        time.sleep(20)
-        run_scraper()
-    
     def time_to_scrape(self):
         # If our next scheduled scrape is in the future, we don't need to scrape
         return self.run_at <= datetime.now()
@@ -51,7 +43,7 @@ class Scraper(models.Model):
             content = None
         return content        
 
-    def run_scraper(self):
+    def scrape(self):
         self.week = Week.objects.latest()
         if not need_scrape():
             return
