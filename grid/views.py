@@ -22,7 +22,7 @@ def index(request):
         else:
             brian_teams.append(picked)
             ben_teams.append(other)
-    interval = 1 * 60 * 1000
+    interval = 1 * 20 * 1000
     return render_to_response('grid/index.html',
                               {'ben_teams': json.dumps(ben_teams),
                                'brian_teams': json.dumps(brian_teams),
