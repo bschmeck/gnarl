@@ -1,8 +1,6 @@
-[ ] SERVER - Scrape scoreboard for current scores.
-[ ] SERVER - Store current scores in the db.
-[ ] SERVER - Enter picks for the week into the db.
-[ ] SERVER - Weekly picks data model.
-[ ] CLIENT - Current scores JSON model.
-[ ] CLIENT - Poll for new scores.
-[ ] CLIENT - Display new scores.
-[ ] CLIENT - Display "win" totals.
+[ ] SERVER - Build Week.scoreboard_url programatically
+[ ] DATABASE - Drop Week.scoreboard_url column
+[ ] DATABASE - Game.home_score can be null
+[ ] DATABASE - Game.away_score can be null
+[ ] DATABASE - Game.time_left can be null
+[ ] ADMIN - Omit score and time_left from Game form
