@@ -13,6 +13,9 @@ class GameTest(unittest.TestCase):
     def test_final_game_is_final(self):
         self.assertTrue(self.game_final.is_final())
         
+    def test_first_quarter_is_not_final(self):
+        self.assertFalse(self.game_first_quarter.is_final())
+
     def test_final_game_not_in_progress(self):
         self.assertFalse(self.game_final.in_progress())
 
