@@ -4,11 +4,11 @@ from game import Game
 
 class GameTest(unittest.TestCase):
     def setUp(self):
-        self.game_final = Game.new(time_left="Final")
-        self.game_first_quarter = Game.new(time_left="14:15 1st QTR")
-        self.game_halftime = Game.new(time_left="Halftime")
-        self.game_overtime = Game.new(time_left="OT")
-        self.game_not_started = Game.new(time_left="8:00 PM")
+        self.game_final = Game.objects.create(time_left="Final")
+        self.game_first_quarter = Game.objects.create(time_left="14:15 1st QTR")
+        self.game_halftime = Game.objects.create(time_left="Halftime")
+        self.game_overtime = Game.objects.create(time_left="OT")
+        self.game_not_started = Game.objects.create(time_left="8:00 PM")
 
     def test_final_game_is_final(self):
         self.assertTrue(self.game_final.is_final())

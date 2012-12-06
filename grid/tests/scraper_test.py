@@ -4,9 +4,9 @@ from scraper import Scraper
 
 class ScraperTest(unittest.TestCase):
     def setUp(self):
-        self.week = Week.new()
-        self.game = Game.new(week=self.week)
-        self.scraper = Scraper.new()
+        self.week = Week.objects.create()
+        self.game = Game.objects.create(week=self.week)
+        self.scraper = Scraper.objects.create()
 
     def test_time_to_scrape(self):
         self.scraper.run_at = datetime.now() - timedelta(days=1)
