@@ -13,5 +13,5 @@ class ParsedGame:
             self.home_team = parsed_data[2]
             self.home_score = 0
         
-        if time_left == "Final OT":
-            time_left = "Final"
+        if self.time_left == "Final OT":
+            self.time_left = "Final"
