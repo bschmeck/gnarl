@@ -78,7 +78,8 @@ class Scraper(models.Model):
                 elif not game.is_final():
                     # If the game hasn't started yet, then we don't need to scrape it until it starts
                     now = datetime.now()
-                    kickoff = datetime.strptime(game.time_left, "%I:%M %p")
+                    timestr = ' '.join(game.time_left.split()[4:6])
+                    kickoff = datetime.strptime(timestr, "%I:%M %p")
                     # Times are given in Eastern time, our server is Central, so adjust the hour
                     gametime = datetime(year=now.year, month=now.month, day=now.day, hour=kickoff.hour-1, minute=kickoff.minute)
                     # We don't know on which day a game is played, so if the time is in the past, assume the game happens
