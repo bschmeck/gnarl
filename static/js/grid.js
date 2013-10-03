@@ -272,6 +272,7 @@ Grid.include({
         $("#brian_wins > .current").text(this.brian.picked_wins);
         $("#brian_wins > .wins").text(this.brian.picked_finals);
         $("#brian_wins > .max_wins").text(this.brian.max_wins);
+        $("#scoreboard").removeClass("win1 win2 win3 win4 loss1 loss2 loss3 loss4 tied");
         $("#scoreboard").addClass(this.choose_week_class());
     },
     insert_clear_div: function(selector) {
