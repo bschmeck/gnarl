@@ -129,6 +129,47 @@ Grid.include({
         }
         return games;
     },
+    choose_week_class: function() {
+        // Return the relevant class for the week overall.
+        // First compare the number of final wins for a player
+        // to their opponent's maximum number of wins.  The week
+        // is over if one player has more final wins than their
+        // opponents max.  If the week is still up in the air
+        // then compare picked_wins, which is the number of correctly
+        // picked games, both final and in-progress.
+        var good_guy;
+        var bad_guy;
+        if (this.ben.is_good_guy) {
+            good_guy = this.ben;
+            bad_guy = this.brian;
+        } else {
+            good_guy = this.brian;
+            bad_guy = this.ben;
+        }
+
+        if (good_guy.picked_finals > bad_guy.max_wins) {
+            return "win4";
+        } else if (bad_guy.picked_finals > good_guy.max_wins) {
+            return "loss4";
+        }
+
+        var delta = good_guy.picked_wins - bad_guy.picked_wins;
+        // We want to return '{win|loss}delta' with the exception
+        // that -3 <= delta <= 3.
+        if (delta > 3) {
+            delta = 3;
+        } else if (delta < 3) {
+            delta = -3;
+        }
+
+        if (delta < 0) {
+            return 'loss' + delta;
+        } else if (delta > 0) {
+            return 'win' + delta;
+        } else {
+            return 'tied';
+        }
+    },
     choose_delta_class: function(game) {
         var ben_team = this.ben.choose_team(game);
         var brian_team = this.brian.choose_team(game);
@@ -231,6 +272,7 @@ Grid.include({
         $("#brian_wins > .current").text(this.brian.picked_wins);
         $("#brian_wins > .wins").text(this.brian.picked_finals);
         $("#brian_wins > .max_wins").text(this.brian.max_wins);
+        $("#scoreboard").addClass(this.choose_week_class());
     },
     insert_clear_div: function(selector) {
         $(selector).append($("<div>").addClass("clear"));
