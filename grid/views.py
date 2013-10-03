@@ -26,7 +26,8 @@ def index(request):
     return render_to_response('grid/index.html',
                               {'ben_teams': json.dumps(ben_teams),
                                'brian_teams': json.dumps(brian_teams),
-                               'interval': interval
+                               'interval': interval,
+                               'week_num': wk.number
                                },
                               context_instance=RequestContext(request))
 
