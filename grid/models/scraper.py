@@ -28,7 +28,7 @@ class Scraper(models.Model):
         if not self.week:
             return False
 
-        if not time_to_scrape():
+        if not self.time_to_scrape():
             return False
             
         return not self.week.all_games_final()
@@ -36,7 +36,7 @@ class Scraper(models.Model):
     def scoreboard_content(self):
         try:
             br = Browser()
-            res = br.open(week.scoreboard_url)
+            res = br.open(self.week.scoreboard_url)
             content = res.read()
         except urllib2.URLError:
             print "Unable to connect to", week.scoreboard_url
@@ -45,13 +45,13 @@ class Scraper(models.Model):
 
     def scrape(self):
         self.week = Week.objects.latest()
-        if not need_scrape():
+        if not self.need_scrape():
             return
 
         # Pull in the scoreboard and parse all the tables with class 'data'
         # The parser will ignore non-scoreboard tables
         # Make sure we have content before parsing
-        content = scoreboard_content()
+        content = self.scoreboard_content()
         if not content:
             return
         parser = ScoreboardParser()
@@ -65,7 +65,7 @@ class Scraper(models.Model):
         next_run = datetime.now() + timedelta(days=1)
         for parsed_game in parser.games:
             try:
-                game = week.game_set.get(away_team=parsed_game.away_team)
+                game = self.week.game_set.get(away_team=parsed_game.away_team)
 
                 game.away_score = parsed_game.away_score
                 game.home_score = parsed_game.home_score
@@ -78,7 +78,8 @@ class Scraper(models.Model):
                 elif not game.is_final():
                     # If the game hasn't started yet, then we don't need to scrape it until it starts
                     now = datetime.now()
-                    kickoff = datetime.strptime(game.time_left, "%I:%M %p")
+                    timestr = ' '.join(game.time_left.split()[4:6])
+                    kickoff = datetime.strptime(timestr, "%I:%M %p")
                     # Times are given in Eastern time, our server is Central, so adjust the hour
                     gametime = datetime(year=now.year, month=now.month, day=now.day, hour=kickoff.hour-1, minute=kickoff.minute)
                     # We don't know on which day a game is played, so if the time is in the past, assume the game happens

@@ -12,9 +12,9 @@ class Game(models.Model):
         ("BRIAN", "Brian"),
     )
     home_team = models.CharField(max_length=3)
-    home_score = models.IntegerField()
+    home_score = models.IntegerField(null=True, blank=True)
     away_team = models.CharField(max_length=3)
-    away_score = models.IntegerField()
+    away_score = models.IntegerField(null=True, blank=True)
 
     week = models.ForeignKey(Week)
 
@@ -23,7 +23,7 @@ class Game(models.Model):
     lock = models.BooleanField(default=False)
     anti_lock = models.BooleanField(default=False)
 
-    time_left = models.CharField(max_length=100)
+    time_left = models.CharField(max_length=100, null=True, blank=True)
 
     def __unicode__(self):
         return "%s @ %s - Week %d" % (self.away_team, self.home_team, self.week.number)
