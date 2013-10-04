@@ -158,12 +158,12 @@ Grid.include({
         // that -3 <= delta <= 3.
         if (delta > 3) {
             delta = 3;
-        } else if (delta < 3) {
+        } else if (delta < -3) {
             delta = -3;
         }
 
         if (delta < 0) {
-            return 'loss' + delta;
+            return 'loss' + Math.abs(delta);
         } else if (delta > 0) {
             return 'win' + delta;
         } else {
