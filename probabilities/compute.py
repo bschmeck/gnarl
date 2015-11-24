@@ -62,15 +62,49 @@ class NumberfireAdapter:
             raise Exception("Non-200 from Numberfire")
 
         data = json.loads(response.text)
-        return map(build_game, data)
+        return map(self.build_game, data)
 
-    def build_game(data):
-        if data['scoreboard'].has_key('game_status'):
-            if data['scoreboard']['game_status'] == 'FINAL':
-                return build_game_final(data)
-            else:
-                return build_game_in_progress(data)
-        return build_game_pregame(data)
+    def build_game(self, data):
+        scoreboard = data['scoreboard']
+        return NumberfireGameBuilder(scoreboard).game()
+
+class NumberfireGameBuilder:
+    def __init__(self, scoreboard):
+        self.scoreboard = scoreboard
+
+    def game(self):
+        return Game(self.home_team(), self.away_team(), self.home_wp())
+
+    def home_team(self):
+        return self.scoreboard['home_team']['abbrev']
+
+    def away_team(self):
+        return self.scoreboard['away_team']['abbrev']
+
+    def home_wp(self):
+        if self.is_final():
+            return self.final_home_wp()
+        if self.is_in_progress():
+            return self.in_progress_home_wp()
+
+        return self.pregame_home_wp()
+
+    def is_final(self):
+        return self.scoreboard.get('game_status') == 'FINAL'
+
+    def is_in_progress(self):
+        return self.scoreboard.has_key('game_status') and not self.is_final()
+
+    def final_home_wp(self):
+        if int(self.scoreboard['winner_id']) == self.scoreboard['away_team_id']:
+            return 0
+        return 1
+
+    def build_game_in_progress(self):
+        pass
+
+    def pregame_home_wp(self):
+        return self.scoreboard['pregame_home_wp'] / 100
 
 class Game:
     def __init__(self, home, away, home_pr):
