@@ -17,3 +17,8 @@ class Week(models.Model):
             if not game.is_final():
                 return False
         return True
+
+    def team_picked_by(self, team):
+        for game in self.game_set.all():
+            if game.picked_team == team:
+                return game.picker

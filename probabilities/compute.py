@@ -39,14 +39,14 @@ class Compute:
         return "push"
 
     def value_of(winner):
-        picker = self.week.picked_by(winner)
+        picker = self.week.team_picked_by(winner)
 
-        if picker is None:
-            return 0
-        elif picker == self.week.picker1:
+        if picker == "BEN":
             return 1
-        else:
+        elif picker == "BRIAN":
             return -1
+        else:
+            return 0
 
     def games(self):
         adapter = NumberfireAdapter(self.week.number)
