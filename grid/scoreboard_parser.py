@@ -27,7 +27,7 @@ class ScoreboardParser(HTMLParser):
         elif tag == 'a' and self.get_name:
             for name, value in attrs:
                 if name == 'href':
-                    self.cur_game.append(value.split("/")[4])
+                    self.cur_game.append(value.split("/")[6])
                     self.get_name = False
     def handle_endtag(self, tag):
         if tag == 'table':
