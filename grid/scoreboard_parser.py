@@ -15,9 +15,9 @@ class ScoreboardParser(HTMLParser):
         if tag == 'table':
             self.cur_game = []
         elif tag == 'td':
-            if ('class', 'teamName') in attrs:
+            if ('class', 'team') in attrs:
                 self.get_name = True
-            elif ('class', 'finalScore') in attrs:
+            elif ('class', 'total-score') in attrs:
                 self.get_data = True
             elif ('class', 'gameStatus') in attrs:
                 self.get_data = True
