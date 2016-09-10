@@ -7,23 +7,23 @@ class ScoreboardParser(HTMLParser):
         HTMLParser.__init__(self)
         self.games = []
         self.cur_game = None
+        self.stop_at = None
         self.get_data = False
         self.get_name = False
-        self.overwrite = False
-        
+        self.data = ''
+
     def handle_starttag(self, tag, attrs):
-        if tag == 'table':
+        if tag == 'div' and self.has_class(attrs, 'live-update'):
             self.cur_game = []
+        elif tag == 'div' and self.has_class(attrs, 'game-status'):
+            self.get_data = True
+            self.stop_at = 'div'
         elif tag == 'td':
             if ('class', 'team') in attrs:
                 self.get_name = True
             elif ('class', 'total-score') in attrs:
                 self.get_data = True
-            elif ('class', 'gameStatus') in attrs:
-                self.get_data = True
-            elif ('class', 'finalStatus') in attrs:
-                self.get_data = True
-                self.overwrite = True
+                self.stop_at = 'td'
         elif tag == 'a' and self.get_name:
             for name, value in attrs:
                 if name == 'href':
@@ -32,14 +32,20 @@ class ScoreboardParser(HTMLParser):
     def handle_endtag(self, tag):
         if tag == 'table':
             self.games.append(ParsedGame(self.cur_game))
+        elif tag == self.stop_at:
+            self.get_data = False
+            self.stop_at = None
+            self.cur_game.append(self.data)
+            self.data = ''
     def handle_data(self, data):
         if not self.get_data:
             return
-        if self.overwrite:
-            self.cur_game[-1] = data.strip()
-        else:
-            self.cur_game.append(data.strip())
-        self.get_data = False
-        self.overwrite = False
-    
-            
+        self.data += data.strip()
+
+    def has_class(self, attrs, class_name):
+        for name, value in attrs:
+            if name != 'class':
+                continue
+            classes = value.split(' ')
+            return class_name in classes
+        return False

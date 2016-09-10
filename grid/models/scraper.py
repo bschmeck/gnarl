@@ -55,7 +55,7 @@ class Scraper(models.Model):
         if not content:
             return
         parser = ScoreboardParser()
-        for table in re.findall('<div class="in-progress-table.*?</table>', content, re.DOTALL):
+        for table in re.findall('<div class="live-update.*?</table>', content, re.DOTALL):
             parser.feed(table)
 
         # After parsing each game we'll figure out when that games needs
