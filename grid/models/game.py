@@ -32,7 +32,7 @@ class Game(models.Model):
         return self.time_left == "Final"
 
     def in_progress(self):
-        if "QTR" in self.time_left:
+        if self.time_left.startswith(("End", "1st", "2nd", "3rd", "4th")):
             return True
         elif "OT" in self.time_left:
             return True
