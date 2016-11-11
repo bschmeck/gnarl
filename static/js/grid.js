@@ -135,8 +135,7 @@ Grid.include({
         // to their opponent's maximum number of wins.  The week
         // is over if one player has more final wins than their
         // opponents max.  If the week is still up in the air
-        // then compare picked_wins, which is the number of correctly
-        // picked games, both final and in-progress.
+        // then compare current wins to current losses
         var good_guy;
         var bad_guy;
         if (this.ben.is_good_guy) {
@@ -153,7 +152,7 @@ Grid.include({
             return "loss4";
         }
 
-        var delta = good_guy.picked_wins - bad_guy.picked_wins;
+        var delta = this.current_wins() - this.current_losses();
         // We want to return '{win|loss}delta' with the exception
         // that -3 <= delta <= 3.
         if (delta > 3) {
