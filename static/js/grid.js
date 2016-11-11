@@ -252,10 +252,19 @@ Grid.include({
             }
         }
     },
+    current_wins: function() {
+        return this.ben.is_good_guy ? this.ben.current_wins : this.brian.current_wins;
+    },
+    current_losses: function() {
+        return this.ben.is_good_guy ? this.brian.current_wins : this.ben.current_wins;
+    },
+    current_ties: function() {
+        return this.ben_games + this.brian_games - this.current_wins() - this.current_losses();
+    },
     current_win_totals: function() {
-        var wins = this.ben.is_good_guy ? this.ben.current_wins : this.brian.current_wins;
-        var losses = this.ben.is_good_guy ? this.brian.current_wins : this.ben.current_wins;
-        var ties = this.ben_games + this.brian_games - wins - losses;
+        var wins = this.current_wins();
+        var losses = this.current_losses();
+        var ties = this.current_ties();
         return wins + "-" + losses + "-" + ties;
     },
     final_win_totals: function() {
